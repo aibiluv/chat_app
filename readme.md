@@ -55,6 +55,11 @@ Run all backend tests with the following command from the backend's root directo
 ```sh
     pytest
 ```
+#### Backend Tests added for based criticality
+*`security_test`*\
+*`api_conversations_test`*\
+*`api_auth_test`*\
+*`websocket_test`*
 
 ### Frontend Tests
 You'll need node and npm for this step.
@@ -75,6 +80,9 @@ The frontend tests use Jest and React Testing Library to verify component behavi
     ```sh
     npm test
     ```
+#### Frontend Tests added for based criticality
+*`auth.test`*\
+*`chatwindow.test`*
 
 ---
 
