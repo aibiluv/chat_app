@@ -1,0 +1,27 @@
+# FastAPI framework and server
+fastapi
+uvicorn[standard]
+
+# Database ORM and adapter
+sqlalchemy
+psycopg2-binary # PostgreSQL adapter
+alembic # For database migrations
+
+# Pydantic, used by FastAPI for data validation
+pydantic
+pydantic-settings
+
+# Password hashing
+passlib[bcrypt]
+
+# JWT for authentication
+python-jose[cryptography]
+
+# For handling python-multipart form data
+python-multipart
+email_validator
+cryptography
+
+pytest
+httpx
+pytest-asyncio

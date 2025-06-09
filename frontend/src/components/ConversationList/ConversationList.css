@@ -1,0 +1,86 @@
+
+.conversation-sidebar {
+  width: 35%;
+  min-width: 280px;
+  max-width: 400px;
+  background-color: #f7f7f7;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0; 
+}
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #efefef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0; 
+}
+.user-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.user-info span {
+  font-size: 0.9rem;
+  color: #666;
+}
+.logout-btn-sidebar {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.new-chat-action {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  flex-shrink: 0; 
+}
+.new-chat-action button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.conversation-list {
+  overflow-y: auto; 
+  flex-grow: 1; 
+}
+.conversation-item {
+  padding: 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #e9e9e9;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.conversation-item:hover {
+  background-color: #e9ecef;
+}
+.conversation-item.active {
+  background-color: #007bff;
+  color: white;
+}
+/* Style for the unread message indicator */
+.unread-dot {
+  height: 10px;
+  width: 10px;
+  background-color: #007bff;
+  border-radius: 50%;
+  flex-shrink: 0; /* Prevents the dot from shrinking */
+}
+.conversation-item.active .unread-dot {
+    background-color: #fff;
+}

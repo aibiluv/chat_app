@@ -1,0 +1,101 @@
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #333;
+}
+.user-list {
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.user-select-item { 
+  padding: 0.75rem; 
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+.user-select-item:hover {
+    background-color: #f0f0f0;
+}
+.user-select-item input {
+  margin-right: 12px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.user-select-item label {
+    flex-grow: 1;
+    cursor: pointer;
+}
+.group-name-input { 
+  width: 100%; 
+  padding: 0.75rem; 
+  margin-bottom: 1.5rem;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+.modal-actions { 
+  display: flex; 
+  justify-content: flex-end; 
+  gap: 1rem; 
+}
+.error-message {
+  color: #d93025;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.btn-primary, .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,123,255,0.2);
+}
+.btn-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+.btn-secondary:hover {
+    background-color: #e0e0e0;
+}
