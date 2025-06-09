@@ -29,7 +29,8 @@ The entire application stack (frontend, backend, database) can be started with a
     ```
 
 3.  **Access the application:**
-    * **Frontend (React App):** `http://localhost:3000`
+    * **Frontend (React App):** `http://localhost:3000`. Should look like this. 
+    ![alt text](image.png)
     * **Backend (API Docs):** `http://localhost:8000/docs` (Interactive Swagger UI)
 
 4.  **Stopping the application:**
