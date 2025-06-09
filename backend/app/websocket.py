@@ -1,4 +1,3 @@
-# backend/app/websocket.py
 import json
 import logging
 from fastapi import WebSocket

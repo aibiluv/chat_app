@@ -1,6 +1,3 @@
-# backend/tests/test_api_conversations.py
-# NEW FILE: Integration tests for the conversation-related API endpoints.
-
 from fastapi.testclient import TestClient
 from typing import Dict
 
