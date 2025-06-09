@@ -1,0 +1,51 @@
+# docker-compose.yml
+# This file orchestrates all the services needed to run the application.
+
+version: '3.8'
+
+services:
+  # The Python/FastAPI Backend Service
+  backend:
+    container_name: chatflow_backend
+    build:
+      context: ./backend # Looks for the Dockerfile in the ./backend directory
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000" # Exposes the container's port 8000 to your local machine's port 8000
+    volumes:
+      - ./backend:/app # Mounts the local ./backend directory into the container at /app for live code reloading
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/chatflowdb
+      - MESSAGE_ENCRYPTION_KEY = mR8EaAKcQkYDJE8a5oX4GgxJ2RkC0z4qDIaiDpaC0HY=
+    depends_on:
+      - db # Ensures the 'db' service starts before the 'backend' service
+    restart: on-failure
+
+  # The React Frontend Service
+  frontend:
+    container_name: chatflow_frontend
+    build:
+      context: ./frontend # Looks for the Dockerfile in the ./frontend directory
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Exposes the container's port 3000 to your local machine's port 3000
+    volumes:
+      - ./frontend/src:/app/src # Mounts only the src directory for hot reloading
+    restart: on-failure
+
+  # The PostgreSQL Database Service
+  db:
+    container_name: chatflow_db
+    image: postgres:15-alpine # Uses an official, lightweight PostgreSQL image
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/ # Persists database data on your local machine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=chatflowdb
+    ports:
+      - "5432:5432" # Exposes the database port for local debugging if needed
+    restart: on-failure
+
+volumes:
+  postgres_data: # Defines the named volume for data persistence
