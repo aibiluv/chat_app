@@ -239,7 +239,7 @@ To scale the initial architecture to handle 10,000 concurrent users, several com
 * **Real-time Communication:** WebSockets were chosen over Long Polling or Server-Sent Events (SSE).
     * **Long Polling** is inefficient, creating high server load and latency.
     * **WebSockets** provide the lowest latency and most efficient two-way communication channel, making them the superior choice for a real-time messaging app.
-
+* **Frontend search**: search functionality was done on the front end to improve performance on the backend. Since the messages are encrypted at rest, searching would mean decrypting before searching.
 ---
 
 ## 6. With More Time
