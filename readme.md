@@ -259,6 +259,7 @@ Given more time, the following improvements would be prioritized to enhance the 
 ### API and Backend Refinements
 * **API Pagination**: The `GET /conversations/{id}/messages` endpoint currently returns all messages at once. I would implement cursor-based pagination to allow the frontend to load message history in smaller, more manageable chunks as the user scrolls.
 * **Input Validation**: Add more granular validation for all API inputs to make the backend more resilient to bad data.
+* **Database Migrations**: The current setup uses `Base.metadata.create_all()` which is suitable for development but not for production. A proper migration tool like **Alembic** would be integrated to manage database schema changes over time without losing data. This involves generating migration scripts for each schema change and applying them as part of the deployment process.
 
 ### Frontend Polish
 * **Optimistic UI Updates**: When a user sends a message, it could be immediately displayed in the UI with a "sending..." status before the backend confirms it has been saved. This makes the interface feel much faster.
@@ -321,3 +322,7 @@ When deploying multiple instances of the backend for high availability, the WebS
 The application should not be exposed directly to the internet. A reverse proxy like **Nginx** or **Caddy** should be set up on the host server or as part of the cloud infrastructure to:
 * **Handle SSL/TLS Termination**: The reverse proxy will manage the HTTPS certificate (e.g., using Let's Encrypt), so your application containers can communicate over plain HTTP within the secure Docker network.
 * **Proxy Requests**: It will forward incoming requests to the appropriate container (e.g., requests to `/api` go to the backend, all other requests go to the frontend).
+
+## 10. Note on AI Assistance
+
+This project was developed by James Osemwegie alone. Google's Gemini, an AI assistant, was used to help refine grammar and syntax, and format documentation. All core architectural decisions, application logic, and feature implementation ideas are the original work of the myself.
