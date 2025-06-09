@@ -7,7 +7,7 @@ import Auth from './Auth';
 // We need to mock the API service to isolate the component for testing.
 import * as api from '../../services/api';
 
-// This tells Jest to replace the actual api module with a mock version.
+
 // All functions from the api service will be replaced with mock functions.
 jest.mock('../../services/api');
 
@@ -111,15 +111,10 @@ describe('Auth Component', () => {
     fireEvent.click(screen.getByText(/don't have an account\? register/i));
     const registerButton = screen.getByRole('button', { name: /register/i });
 
-    // The button should be disabled because the fields are empty.
-    // Note: The HTML 'required' attribute handles this behavior.
-    // A more robust test could check the form's validity state.
+  
     const usernameInput = screen.getByPlaceholderText(/username/i);
     fireEvent.change(usernameInput, { target: { value: 'test' } });
     
-    // In a real browser, the form would be invalid without all required fields.
-    // React Testing Library doesn't run a full browser, so we can infer this
-    // behavior or check the 'required' attribute itself.
     expect(usernameInput).toBeRequired();
     expect(screen.getByPlaceholderText(/email/i)).toBeRequired();
     expect(screen.getByPlaceholderText(/password/i)).toBeRequired();

@@ -30,7 +30,6 @@ api.interceptors.response.use(
       localStorage.removeItem('token');
       // Redirect the user to the login page.
       // Using window.location.href will cause a full page reload,
-      // which will effectively reset the application's state.
       if (window.location.pathname !== '/auth') {
         window.location.href = '/auth';
       }

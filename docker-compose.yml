@@ -1,5 +1,3 @@
-# docker-compose.yml
-# This file orchestrates all the services needed to run the application.
 
 version: '3.8'
 
