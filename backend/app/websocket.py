@@ -1,6 +1,4 @@
 # backend/app/websocket.py
-# MODIFIED: Added detailed logging to all methods for better traceability.
-
 import json
 import logging
 from fastapi import WebSocket

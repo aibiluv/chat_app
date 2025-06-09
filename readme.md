@@ -229,5 +229,4 @@ To scale the initial architecture to handle 10,000 concurrent users, several com
 * **Choice of Database:** A relational database (PostgreSQL) was chosen over NoSQL. While NoSQL databases can offer easier horizontal scaling for chat messages, PostgreSQL provides strong data consistency, transactional integrity, and powerful querying capabilities for the relational aspects (users, conversation participants), which are critical.
 * **Real-time Communication:** WebSockets were chosen over Long Polling or Server-Sent Events (SSE).
     * **Long Polling** is inefficient, creating high server load and latency.
-    * **SSE** is excellent for one-way server-to-client communication, but chat is bidirectional.
     * **WebSockets** provide the lowest latency and most efficient two-way communication channel, making them the superior choice for a real-time messaging app.
