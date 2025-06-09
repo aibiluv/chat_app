@@ -262,6 +262,7 @@ Given more time, the following improvements would be prioritized to enhance the 
 ### Frontend Polish
 * **Optimistic UI Updates**: When a user sends a message, it could be immediately displayed in the UI with a "sending..." status before the backend confirms it has been saved. This makes the interface feel much faster.
 * **Better State Management**: For a larger application, I would consider integrating a dedicated state management library like Zustand or React Context for managing global state more effectively.
+* **Implement avatar**.
 
 ---
 
