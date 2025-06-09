@@ -1,14 +1,86 @@
-# ChatFlow: Technical Architecture & System Design
+# ChatFlow - A Messaging Application
 
-This document outlines the architectural decisions, technology stack, and scaling strategy for the ChatFlow messaging application.
+ChatFlow is a simplified, WhatsApp-like messaging application built with a React frontend, a Python (FastAPI) backend, and containerized with Docker.
 
 ---
 
-## 1. High-Level System Design
+## 1. Getting Started
 
-The system is designed as a classic three-tier architecture, containerized with Docker for consistency and ease of deployment. The core components are the client (React Frontend), a stateless API Backend with an integrated WebSocket manager for real-time communication, and a relational database.
+### Prerequisites
 
-The diagram below represents the simplified local development and initial deployment setup.
+You must have the following software installed on your local machine:
+
+* **Docker Desktop:** [Download Here](https://www.docker.com/products/docker-desktop)
+
+### How to Run the Application
+
+The entire application stack (frontend, backend, database) can be started with a single command from the project's root directory.
+
+1.  **Clone the repository** (if you haven't already).
+
+2.  **Build and run the containers:**
+    The first time you run this command, Docker will download the necessary base images and build your application's images.
+    ```sh
+    docker-compose up --build
+    ```
+    To run in detached mode (in the background), add the `-d` flag:
+    ```sh
+    docker-compose up --build -d
+    ```
+
+3.  **Access the application:**
+    * **Frontend (React App):** `http://localhost:3000`
+    * **Backend (API Docs):** `http://localhost:8000/docs` (Interactive Swagger UI)
+
+4.  **Stopping the application:**
+    To stop the running containers, press `Ctrl+C` in the terminal where `docker-compose` is running. If you are in detached mode, use the following command:
+    ```sh
+    docker-compose down
+    ```
+
+---
+
+## 2. Running the Tests
+
+### Backend Tests
+
+You'll need python and pip for this step. 
+
+Install all requirements libraries
+```sh
+backend_root_folder> pip install -r requirements.txt
+```
+
+Run all backend tests with the following command from the backend's root directory:
+```sh
+    pytest
+```
+
+### Frontend Tests
+You'll need node and npm for this step.
+
+The frontend tests use Jest and React Testing Library to verify component behavior.
+
+1.  Navigate to the `frontend` directory:
+    ```sh
+    cd frontend
+    ```
+
+2.  Install dependencies (only needed the first time):
+    ```sh
+    npm install
+    ```
+
+3.  Run the tests in watch mode:
+    ```sh
+    npm test
+    ```
+
+---
+
+## 3. High-Level Architecture
+
+The system is a classic three-tier architecture, containerized with Docker for consistency. The core components are the React Frontend, a Python API Backend (which also manages WebSockets), and a PostgreSQL database.
 
 ```mermaid
 graph TD
@@ -25,63 +97,73 @@ graph TD
     Backend <--> DB
 ```
 
-* **Client (React Frontend):** A single-page application (SPA) that communicates with the backend via a RESTful API (for fetching data and sending commands) and a WebSocket connection (for real-time messages).
-* **Backend Service (Python/FastAPI):** A single, containerized service that handles all business logic.
-    * **REST API:** Manages user authentication, profiles, conversation history, etc.
-    * **WebSocket Gateway:** Manages persistent WebSocket connections for real-time message delivery.
-* **Database (PostgreSQL):** The primary data store for all persistent data, running in its own container.
+---
+
+## 4. UI Component Architecture
+
+The frontend is structured with a parent `ChatLayout` component that manages the state and orchestrates the child components for displaying the conversation list and the active chat window.
+
+```mermaid
+graph TD
+    App -- Manages Auth State --> ChatLayout
+    ChatLayout -- Displays --> ConversationList
+    ChatLayout -- Displays --> ChatWindow
+    ChatLayout -- Opens --> NewConversationModal
+```
+
+* **`App`**: The root component. Handles routing and global authentication state.
+* **`ChatLayout`**: The main container after login. Fetches the conversation list and manages which conversation is currently active.
+* **`ConversationList`**: Renders the list of conversations and displays unread message indicators.
+* **`ChatWindow`**: Renders the messages for the active conversation and handles real-time updates and user interactions (sending messages, search).
+* **`NewConversationModal`**: A modal dialog for creating new one-on-one or group chats.
 
 ---
 
-## 2. Technology Choices & Rationale
+## 5. API Documentation
 
-| Component | Technology | Rationale |
-| :--- | :--- | :--- |
-| **Frontend** | **React** | A powerful, component-based library for building interactive UIs. Its vast ecosystem and developer community make it a robust choice. |
-| **Backend** | **Python & FastAPI** | Python is excellent for rapid development. FastAPI provides incredibly high performance (on par with NodeJS), automatic API documentation (Swagger/OpenAPI), data validation via Pydantic, and native support for asynchronous operations, including WebSockets. |
-| **Database** | **PostgreSQL** | A powerful, open-source object-relational database system with a strong reputation for reliability, feature robustness, and performance. It's ideal for handling the relational data of users, conversations, and messages. |
-| **Real-time** | **WebSockets** | Provides a full-duplex, persistent communication channel between the client and server. This is far more efficient and scalable for a chat application than alternatives like long-polling or Server-Sent Events (SSE), as it minimizes latency and overhead. |
-| **Containerization**| **Docker & Docker Compose**| Ensures a consistent and reproducible environment for development, testing, and deployment. `docker-compose` simplifies the local setup to a single command. |
-| **Authentication**| **JWT (JSON Web Tokens)**| JWTs are a stateless, standard way to handle authentication in RESTful APIs. Once a user logs in, the client stores the token and sends it with each subsequent request, allowing the backend to scale horizontally without needing a shared session store. |
+The backend exposes a RESTful API and a WebSocket endpoint. You can explore and test the REST endpoints interactively at `http://localhost:8000/docs`.
+
+### REST Endpoints
+
+#### Authentication (`/auth`)
+* **`POST /auth/register`**: Registers a new user.
+* **`POST /auth/login`**: Authenticates a user and returns a JWT access token.
+
+#### Users (`/users`)
+* **`GET /users/`**: Retrieves a list of all users, used for creating new conversations. (Requires authentication)
+
+#### Conversations (`/conversations`)
+* **`POST /`**: Creates a new one-on-one or group conversation. (Requires authentication)
+* **`GET /`**: Retrieves a list of all conversations for the authenticated user, including their unread status. (Requires authentication)
+* **`GET /{conversation_id}/messages`**: Fetches the message history for a specific conversation. (Requires authentication and participation)
+* **`POST /{conversation_id}/read`**: Marks all messages in a conversation as read by the current user. (Requires authentication)
+
+### WebSocket Endpoint
+
+* **`WS /ws/{conversation_id}/{token}`**
+    * Establishes a WebSocket connection for real-time communication within a specific conversation.
+    * **`conversation_id`**: The ID of the chat to connect to.
+    * **`token`**: The user's JWT access token for authentication.
+    * **Functionality**: Handles real-time message delivery, online/offline status updates, and read receipts.
 
 ---
 
-## 3. Database Schema Design
+## 6. Technology Choices & Rationale
 
-The schema is designed to be normalized to reduce data redundancy and ensure integrity. It revolves around users, conversations, and the messages within them.
+| Component         | Technology                | Rationale                                                                                                                                                                                                                         |
+| ----------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Frontend** | **React** | A powerful, component-based library for building interactive UIs. Its vast ecosystem and developer community make it a robust choice.                                                                                             |
+| **Backend** | **Python & FastAPI** | Python is excellent for rapid development. FastAPI provides incredibly high performance, automatic API documentation, data validation via Pydantic, and native support for asynchronous operations, including WebSockets. |
+| **Database** | **PostgreSQL** | A powerful, open-source object-relational database system with a strong reputation for reliability and feature robustness. It's ideal for handling the relational data of users, conversations, and messages.       |
+| **Real-time** | **WebSockets** | Provides a full-duplex, persistent communication channel between the client and server. This is far more efficient and scalable for a chat application than alternatives like long-polling.                                         |
+| **Containerization**| **Docker & Docker Compose**| Ensures a consistent and reproducible environment for development, testing, and deployment. `docker-compose` simplifies the local setup to a single command.                                                                     |
+| **Authentication**| **JWT (JSON Web Tokens)** | JWTs are a stateless, standard way to handle authentication in RESTful APIs. Once a user logs in, the client stores the token and sends it with each subsequent request.                                                        |
 
-**Tables:**
+---
 
-1.  `users`
-    * `id` (UUID, Primary Key)
-    * `username` (VARCHAR, Unique, Not Null)
-    * `email` (VARCHAR, Unique, Not Null)
-    * `password_hash` (VARCHAR, Not Null)
-    * `full_name` (VARCHAR, Nullable)
-    * `avatar_url` (VARCHAR, Nullable)
-    * `created_at` (TIMESTAMPZ, Default: NOW())
+## 7. Database Schema
 
-2.  `conversations`
-    * `id` (UUID, Primary Key)
-    * `name` (VARCHAR, Nullable - for group chats)
-    * `is_group_chat` (BOOLEAN, Default: false)
-    * `created_at` (TIMESTAMPZ, Default: NOW())
-    * `last_message_at` (TIMESTAMPZ, Nullable - for sorting)
-
-3.  `participants` (Junction Table)
-    * `conversation_id` (UUID, Foreign Key -> `conversations.id`, Part of Composite PK)
-    * `user_id` (UUID, Foreign Key -> `users.id`, Part of Composite PK)
-    * `joined_at` (TIMESTAMPZ, Default: NOW())
-
-4.  `messages`
-    * `id` (UUID, Primary Key)
-    * `conversation_id` (UUID, Foreign Key -> `conversations.id`)
-    * `sender_id` (UUID, Foreign Key -> `users.id`)
-    * `content` (TEXT, Not Null)
-    * `created_at` (TIMESTAMPZ, Default: NOW())
-
-**Entity-Relationship Diagram:**
-
+The schema is designed to be normalized to reduce data redundancy and ensure integrity.
 ```mermaid
 erDiagram
     users {
@@ -89,6 +171,9 @@ erDiagram
         VARCHAR username
         VARCHAR email
         VARCHAR password_hash
+        VARCHAR full_name
+        VARCHAR avatar_url
+        TIMESTAMPZ created_at
     }
 
     conversations {
@@ -96,27 +181,29 @@ erDiagram
         VARCHAR name
         BOOLEAN is_group_chat
         TIMESTAMPZ last_message_at
+        TIMESTAMPZ created_at
     }
 
     participants {
         UUID conversation_id PK, FK
         UUID user_id PK, FK
+        TIMESTAMPZ last_read_timestamp
     }
 
     messages {
         UUID id PK
         TEXT content
+        UUID sender_id FK
+        UUID conversation_id FK
+        VARCHAR status
         TIMESTAMPZ created_at
     }
 
     users ||--o{ participants : "participates in"
     conversations ||--o{ participants : "has"
-    conversations ||--o{ messages : "contains"
     users ||--o{ messages : "sends"
+    conversations ||--o{ messages : "contains"
 ```
-
----
-
 ## 4. Scaling Considerations (To 10k Concurrent Users)
 
 To scale the initial architecture to handle 10,000 concurrent users, several components would need to be introduced:

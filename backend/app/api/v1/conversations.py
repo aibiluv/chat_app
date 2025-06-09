@@ -1,5 +1,6 @@
 
 import json
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
@@ -11,6 +12,7 @@ from ...db import database, models
 from ...core.security import get_current_user
 from ...websocket import manager
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 @router.post("/", response_model=schemas.Conversation)
 def create_new_conversation(
@@ -56,5 +58,6 @@ async def mark_as_read(
         }
         # Broadcast to all connections of the sender
         await manager.broadcast_to_user(sender_id, json.dumps(receipt_message))
-    
+        logger.info(f"sender: {sender_id}")
+
     return
