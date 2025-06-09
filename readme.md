@@ -325,4 +325,4 @@ The application should not be exposed directly to the internet. A reverse proxy 
 
 ## 10. Note on AI Assistance
 
-This project was developed by James Osemwegie alone. Google's Gemini, an AI assistant, was used to help refine grammar and syntax, and format documentation. All core architectural decisions, application logic, and feature implementation ideas are the original work of the myself.
+This project was developed by James Osemwegie alone. Google's Gemini, an AI assistant, was used to help create dockerCompse.yml, refine grammar and syntax, and format documentation. All core architectural decisions, application logic, and feature implementation ideas are the original work of myself.
